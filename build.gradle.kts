@@ -4,3 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
 }
+
+dependencies {
+    // Other project-level dependencies
+}
+buildscript {
+    repositories {
+        google()
+        mavenCentral() // Make sure this is included
+    }
+
+    dependencies {
+        classpath(libs.hilt.android.gradle.plugin) // Use the correct Hilt version
+    }
+}

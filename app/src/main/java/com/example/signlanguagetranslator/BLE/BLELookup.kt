@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 
 class LeDeviceListAdapter(context: Context) :
     ArrayAdapter<BluetoothDevice>(context, 0, ArrayList()) {
@@ -81,6 +82,7 @@ class FindBLE(context: Context) {
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     private fun scanLeDevice() {
+
         if (!scanning) {
             handler.postDelayed({
                 scanning = false
