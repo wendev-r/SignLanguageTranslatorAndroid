@@ -32,8 +32,7 @@ class GloveSensorBLEReceiveManager @Inject constructor(
     private val DEVICE_NAME = "SignLanguageBLE"
     private val SERVICE_UUID = "36e35709-b932-40b9-be0c-81d0f298c97b"
     private val CHAR_UUID = "4ea7d6e2-7f2c-468f-b205-e3c539fa95b6"
-    override val data: MutableSharedFlow<Resource<GloveResult>>
-        get() = MutableSharedFlow()
+    override val data: MutableSharedFlow<Resource<GloveResult>> = MutableSharedFlow()
 
     private val bleScanner by lazy {
         bluetoothAdapter.bluetoothLeScanner
@@ -155,8 +154,6 @@ class GloveSensorBLEReceiveManager @Inject constructor(
                     else -> Unit
                 }
             }
-
-
         }
     }
 

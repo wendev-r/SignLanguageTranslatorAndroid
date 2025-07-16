@@ -63,6 +63,9 @@ dependencies {
     kapt(libs.daggerCompiler)
     // Dagger core dependency
     implementation(libs.dagger)
+    implementation(libs.accompanist.permissions)
+    implementation(libs.accompanist.permissions.v0350alpha)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Dagger Hilt
     implementation(libs.hilt.android) // Or your preferred version

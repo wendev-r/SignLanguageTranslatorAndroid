@@ -3,6 +3,8 @@ package com.example.signlanguagetranslator.dl
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import com.example.signlanguagetranslator.data.GloveSensorReceiveManager
+import com.example.signlanguagetranslator.data.ble.GloveSensorBLEReceiveManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +22,14 @@ object AppModule{
         val manager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         return manager.adapter
     }
+
+    @Provides
+    @Singleton
+    fun provideGloveSensorReceiveManager(
+        @ApplicationContext context: Context,
+        bluetoothAdapter: BluetoothAdapter
+    ): GloveSensorReceiveManager {
+        return GloveSensorBLEReceiveManager(bluetoothAdapter, context)
+    }
+
 }

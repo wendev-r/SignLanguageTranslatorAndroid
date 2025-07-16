@@ -11,10 +11,11 @@ dependencies {
 buildscript {
     repositories {
         google()
-        mavenCentral() // Make sure this is included
+        mavenCentral()
     }
 
     dependencies {
         classpath(libs.hilt.android.gradle.plugin) // Use the correct Hilt version
     }
 }
+
