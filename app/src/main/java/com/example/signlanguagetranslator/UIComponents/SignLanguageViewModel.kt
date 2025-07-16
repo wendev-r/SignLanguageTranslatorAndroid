@@ -32,7 +32,7 @@ class SignLanguageViewModel @Inject constructor(
     var pointZ by mutableFloatStateOf(0f)
         private set
 
-    var connectionState by mutableStateOf<ConnectionState>(ConnectionState.CurrentlyInitializing)
+    var connectionState by mutableStateOf<ConnectionState>(ConnectionState.Uninitialized)
         private set
 
 

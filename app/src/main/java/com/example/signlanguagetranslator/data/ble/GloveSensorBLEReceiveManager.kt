@@ -49,8 +49,8 @@ class GloveSensorBLEReceiveManager @Inject constructor(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val scanCallback = object : ScanCallback() {
-        override fun onScanResult(callbackType: Int, result: ScanResult?) {
-            if (result?.device?.name == DEVICE_NAME) {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
+            if (result.device.name == DEVICE_NAME) {
                 coroutineScope.launch {
                     data.emit(Resource.Loading(message = "Connecting to device..."))
                 }
@@ -70,10 +70,10 @@ class GloveSensorBLEReceiveManager @Inject constructor(
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                     coroutineScope.launch { data.emit(Resource.Loading(message = "Discovering Services...")) }
-                }
-                gatt.discoverServices()
-                this@GloveSensorBLEReceiveManager.gatt = gatt
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+
+                    gatt.discoverServices()
+                    this@GloveSensorBLEReceiveManager.gatt = gatt
+                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 coroutineScope.launch {
                     data.emit(
                         Resource.Success(
@@ -85,6 +85,7 @@ class GloveSensorBLEReceiveManager @Inject constructor(
                     )
                 }
                 gatt.close()
+                }
             } else {
                 gatt.close()
                 currentConnectionAttempt += 1
@@ -94,14 +95,17 @@ class GloveSensorBLEReceiveManager @Inject constructor(
                             message = "Attempting to connect $currentConnectionAttempt/$MAX_CONNECTION_ATTEMPTS"
                         )
                     )
+                }
                     if (currentConnectionAttempt <= MAX_CONNECTION_ATTEMPTS) {
                         startReceiving()
                     } else {
-                        coroutineScope.launch { data.emit(Resource.Error("Cound Not Connect to BLE Device")) }
+                        coroutineScope.launch {
+                            data.emit(Resource.Error("Cound Not Connect to BLE Device"))
+                        }
                     }
                 }
             }
-        }
+
 
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
@@ -184,16 +188,21 @@ class GloveSensorBLEReceiveManager @Inject constructor(
 
     private fun findCharacteristics(
         serviceUUID: String,
-        charUUID: String
+        characteristicsUUID: String
     ): BluetoothGattCharacteristic? {
-        return gatt?.services?.find { service -> service.uuid.toString() == serviceUUID }?.characteristics?.find { characteristics -> characteristics.uuid.toString() == charUUID }
+        return gatt?.services?.find { service ->
+            service.uuid.toString() == serviceUUID
+        }?.characteristics?.find { characteristics ->
+            characteristics.uuid.toString() == characteristicsUUID
+        }
     }
 
     override fun startReceiving() {
-        coroutineScope.launch { data.emit(Resource.Loading(message = "Scanning BLE Devices")) }
+        coroutineScope.launch {
+            data.emit(Resource.Loading(message = "Scanning Ble devices..."))
+        }
         isScanning = true
         bleScanner.startScan(null, scanSettings, scanCallback)
-
     }
 
     override fun reconnect() {
@@ -217,7 +226,7 @@ class GloveSensorBLEReceiveManager @Inject constructor(
         val cccdUuid = UUID.fromString(CCCD_DESCRIPTOR_UUID)
         characteristic.getDescriptor(cccdUuid)?.let { cccdDescriptor ->
             if (gatt?.setCharacteristicNotification(characteristic, false) == false) {
-                Log.d("TempHumidReceiveManager", "set charateristics notification failed")
+                Log.d("BLEReceiveManager", "set charateristics notification failed")
                 return
             }
             writeDescription(cccdDescriptor, BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE)
