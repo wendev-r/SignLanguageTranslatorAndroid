@@ -6,7 +6,7 @@ import android.bluetooth.BluetoothGattDescriptor
 import android.util.Log
 import java.util.Locale
 
-const val CCCD_DESCRIPTOR_UUID = "4ea7d6e2-7f2c-468f-b205-e3c539fa95b6"
+const val CCCD_DESCRIPTOR_UUID = "00002902-0000-1000-8000-00805f9b34fb"
 
 fun BluetoothGatt.printGattTable() {
     if (services.isEmpty()) {

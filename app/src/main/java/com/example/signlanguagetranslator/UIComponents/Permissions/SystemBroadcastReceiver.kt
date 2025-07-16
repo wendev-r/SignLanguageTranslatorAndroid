@@ -13,16 +13,18 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun SystemBroadcastReceiver(
-    systemAction:String, onSystemEvent:(intent:Intent?) -> Unit
-){
-    var context = LocalContext.current
+    systemAction: String,
+    onSystemEvent: (intent: Intent?) -> Unit
+) {
+
+    val context = LocalContext.current
+
     val currentOnSystemEvent by rememberUpdatedState(onSystemEvent)
 
     DisposableEffect(context, systemAction){
         val intentFilter = IntentFilter(systemAction)
         val broadcast = object : BroadcastReceiver(){
-            override fun onReceive(p0: Context?, intent:Intent?)
-            {
+            override fun onReceive(p0: Context?, intent: Intent?) {
                 currentOnSystemEvent(intent)
             }
         }
@@ -32,6 +34,6 @@ fun SystemBroadcastReceiver(
         onDispose {
             context.unregisterReceiver(broadcast)
         }
-    }
 
+    }
 }
